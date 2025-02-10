@@ -1,4 +1,4 @@
-// app/api/auth/player/route.ts
+// app/api/auth/albums/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
@@ -10,25 +10,26 @@ export async function GET() {
   }
 
   try {
-    const response = await fetch("https://api.spotify.com/v1/me/player", {
+    const response = await fetch("https://api.spotify.com/v1/me/albums", {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (response.status === 204) {
-      // No content, means no active player session
+      // No content, means no active albums session
       return NextResponse.json({});
     }
 
     if (!response.ok) {
-      throw new Error("Failed to fetch player");
+      throw new Error("Failed to fetch albums");
     }
 
-    const player = await response.json();
+    const albums = await response.json();
+    console.log(albums);
 
-    return NextResponse.json(player);
+    return NextResponse.json(albums);
   } catch (error) {
-    console.error("Error fetching player:", error);
-    return NextResponse.json({ error: "Failed to fetch player" }, { status: 500 });
+    console.error("Error fetching albums:", error);
+    return NextResponse.json({ error: "Failed to fetch albums" }, { status: 500 });
   }
 }

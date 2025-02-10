@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   if (!code) {
     // Redirect user to Spotify login
-    const scope = "user-read-private user-read-email user-top-read user-top-read user-read-playback-state";
+    const scope = "user-read-private user-read-email user-top-read user-top-read user-library-read user-read-playback-state";
     const authURL = `${SPOTIFY_AUTH_URL}?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(
       REDIRECT_URI
     )}&scope=${encodeURIComponent(scope)}`;

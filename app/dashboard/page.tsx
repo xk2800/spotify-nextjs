@@ -1,6 +1,8 @@
 // app/dashboard/page.tsx
 'use client'
 
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface SpotifyProfile {
@@ -13,16 +15,33 @@ interface SpotifyProfile {
   };
 }
 
+interface SpotifyPlayer {
+  device: {
+    name: string;
+  };
+}
+
+interface SpotifyAlbum {
+  album: {
+    id: string;
+    name: string;
+    images: { url: string }[];
+    artists: { name: string }[];
+  };
+}
+
 export default function Dashboard() {
-  const [profile, setProfile] = useState(null);
-  const [player, setPlayer] = useState(null);
+  const [profile, setProfile] = useState<SpotifyProfile | null>(null);
+  const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
+  const [albums, setAlbums] = useState<SpotifyAlbum[]>([]); // ✅ Default to empty array
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [profileRes, playerRes] = await Promise.all([
+        const [profileRes, playerRes, albumsRes] = await Promise.all([
           fetch("/api/auth/profile"),
           fetch("/api/auth/player"),
+          fetch("/api/auth/albums"),
         ]);
 
         if (profileRes.ok) {
@@ -33,13 +52,25 @@ export default function Dashboard() {
 
         if (playerRes.ok) {
           const playerData = await playerRes.json();
-          console.log(playerData);
-          setPlayer(playerData);
+          if (playerData && Object.keys(playerData).length > 0 && !playerData.error) {
+            setPlayer(playerData);
+          } else {
+            console.log("No active player found, skipping update.");
+          }
+        }
+
+        if (albumsRes.ok) {
+          const albumsData = await albumsRes.json();
+          setAlbums(Array.isArray(albumsData.items) ? albumsData.items : []); // ✅ Ensures albums is always an array
+          console.log(albumsData);
+
         } else {
-          console.error("Failed to load player");
+          console.error("Failed to load albums");
+          setAlbums([]); // ✅ Fallback to empty array
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        setAlbums([]); // ✅ Fallback to empty array on error
       }
     }
 
@@ -47,18 +78,37 @@ export default function Dashboard() {
   }, []);
 
   if (!profile) return <p>Loading...</p>;
-  // if (!player) return <p>Loading...</p>;
+  if (albums.length === 0) return <p>No saved albums found.</p>; // ✅ Now this won't crash
 
   return (
     <div>
       <h1>Welcome, {profile.display_name}</h1>
-      {profile.images?.length > 0 && (
-        <img src={profile.images[0].url} alt="Profile" width={100} height={100} />
+      {profile.images?.[0]?.url && (
+        <Image src={profile.images[0].url} alt="Profile" width={100} height={100} priority />
       )}
       <p>Email: {profile.email}</p>
       <p>Spotify ID: {profile.id}</p>
       <a href={profile.external_urls.spotify} target="_blank">View Profile</a>
-      <p>Device: { }</p>
+      {player &&
+        <p>Media currently playing on: {player.device.name}</p>
+      }
+      <p>Your Saved Playlists</p>
+      <ul className="grid grid-cols-2 md:grid-cols-7">
+        {albums.map((album) => (
+          <Link key={album.album.id} href={`/album/${album.album.id}`}>
+            <li>
+              <p className="text-bold text-red-200">{album.album.external_urls.spotify}</p>
+              <img
+                src={album.album.images[0]?.url}
+                alt={album.album.name}
+                width={100}
+                height={100}
+              />
+              <p>{album.album.name} - {album.album.artists[0]?.name}</p>
+            </li>
+          </Link>
+        ))}
+      </ul>
     </div>
   );
 }
