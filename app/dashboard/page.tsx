@@ -14,21 +14,40 @@ interface SpotifyProfile {
 }
 
 export default function Dashboard() {
-  const [profile, setProfile] = useState<SpotifyProfile | null>(null);
+  const [profile, setProfile] = useState(null);
+  const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    async function fetchProfile() {
-      const res = await fetch("/api/auth/profile");
-      if (res.ok) {
-        setProfile(await res.json());
-      } else {
-        console.error("Failed to load profile");
+    async function fetchData() {
+      try {
+        const [profileRes, playerRes] = await Promise.all([
+          fetch("/api/auth/profile"),
+          fetch("/api/auth/player"),
+        ]);
+
+        if (profileRes.ok) {
+          setProfile(await profileRes.json());
+        } else {
+          console.error("Failed to load profile");
+        }
+
+        if (playerRes.ok) {
+          const playerData = await playerRes.json();
+          console.log(playerData);
+          setPlayer(playerData);
+        } else {
+          console.error("Failed to load player");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     }
-    fetchProfile();
+
+    fetchData();
   }, []);
 
   if (!profile) return <p>Loading...</p>;
+  // if (!player) return <p>Loading...</p>;
 
   return (
     <div>
@@ -39,6 +58,7 @@ export default function Dashboard() {
       <p>Email: {profile.email}</p>
       <p>Spotify ID: {profile.id}</p>
       <a href={profile.external_urls.spotify} target="_blank">View Profile</a>
+      <p>Device: { }</p>
     </div>
   );
 }
