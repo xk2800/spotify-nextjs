@@ -1,10 +1,13 @@
 // app/page.tsx
+
+import { Button } from "@/components/ui/button"
+
 export default function Home() {
   return (
     <div>
       <h1>Spotify Authentication</h1>
       <a href="/api/auth">
-        <button>Login with Spotify</button>
+        <Button>Login with Spotify</Button>
       </a>
     </div>
   );

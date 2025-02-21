@@ -33,7 +33,7 @@ interface SpotifyAlbum {
 export default function Dashboard() {
   const [profile, setProfile] = useState<SpotifyProfile | null>(null);
   const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
-  const [albums, setAlbums] = useState<SpotifyAlbum[]>([]); // ✅ Default to empty array
+  const [albums, setAlbums] = useState<SpotifyAlbum[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -41,7 +41,8 @@ export default function Dashboard() {
         const [profileRes, playerRes, albumsRes] = await Promise.all([
           fetch("/api/auth/profile"),
           fetch("/api/auth/player"),
-          fetch("/api/auth/albums"),
+          // fetch("/api/auth/albums"),
+          fetch("/server/albums"),
         ]);
 
         if (profileRes.ok) {
@@ -95,7 +96,7 @@ export default function Dashboard() {
       <p>Your Saved Playlists</p>
       <ul className="grid grid-cols-2 md:grid-cols-7">
         {albums.map((album) => (
-          <Link key={album.album.id} href={`/album/${album.album.id}`}>
+          <Link key={album.album.id} href={`/album?id=${album.album.id}`}>
             <li>
               <p className="text-bold text-red-200">{album.album.external_urls.spotify}</p>
               <img
