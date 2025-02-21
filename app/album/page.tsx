@@ -1,20 +1,29 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Album() {
   const searchParams = useSearchParams();
   const albumId = searchParams.get("id");
 
-  const [album, setAlbum] = useState<{
+  interface Album {
     name: string;
     imageUrl: string | null;
-    tracks: { id: string; name: string; artists: string; duration: number }[];
-  } | null>(null);
+    tracks: {
+      id: string;
+      name: string;
+      artists: string;
+      duration: number;
+    }[];
+  }
 
+  const [album, setAlbum] = useState<Album | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter()
 
   useEffect(() => {
     if (!albumId) {
@@ -51,6 +60,8 @@ export default function Album() {
 
   return (
     <div>
+
+      <Button onClick={() => router.back()}>Back to Albums</Button>
 
       <h1>{album.name || "Unknown Album"}</h1>
 
