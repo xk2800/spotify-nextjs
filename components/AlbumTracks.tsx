@@ -2,6 +2,7 @@
 import { Suspense } from 'react';
 // import { TracksResponse } from './types';
 
+/*
 interface TracksResponse {
   items: {
     id: string;
@@ -11,6 +12,7 @@ interface TracksResponse {
   }[];
   // Add other response properties as needed
 }
+*/
 
 async function getTracks(albumId: string) {
   const response = await fetch(`/api/albums/${albumId}/tracks`, {
