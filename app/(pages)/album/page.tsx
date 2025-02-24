@@ -1,31 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { MoveLeft } from "lucide-react";
-import { motion } from 'framer-motion';
-import Image from "next/image";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { format } from "date-fns";
+import { MoveLeft } from "lucide-react";
+import { motion } from "motion/react";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+// import { Loading } from "@/components/loading"; // You'll need to create this component
 
-export default function Album() {
+// AlbumContent component that uses useSearchParams
+const AlbumContent = () => {
   const searchParams = useSearchParams();
   const albumId = searchParams.get("id");
+  const router = useRouter();
 
   interface Album {
     name: string;
@@ -36,17 +26,14 @@ export default function Album() {
       artists: string;
       duration: number;
     }[];
-    total_tracks: string,
-    copyrights: string,
-    release_date: string,
+    total_tracks: string;
+    copyrights: string;
+    release_date: string;
   }
 
   const [album, setAlbum] = useState<Album | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const router = useRouter()
-
 
   useEffect(() => {
     if (!albumId) {
@@ -79,18 +66,17 @@ export default function Album() {
 
   if (loading) return <p>Loading album...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!album) return <p>No album found.</p>; // Handle empty album response
+  if (!album) return <p>No album found.</p>;
 
   return (
     <div>
-
       <motion.div
-        whileHover="hover" // Applies hover animation to all child elements
+        whileHover="hover"
         className="inline-flex items-center gap-2"
       >
         <Button variant="link" onClick={() => router.back()} className="flex items-center gap-2 pl-2 hover:no-underline hover:text-[#1ED760]">
           <motion.div
-            variants={{ hover: { x: -5 } }} // Moves left when parent is hovered
+            variants={{ hover: { x: -5 } }}
             transition={{ type: "spring", stiffness: 300 }}
           >
             <MoveLeft />
@@ -106,7 +92,6 @@ export default function Album() {
           ) : (
             <p>No album image available</p>
           )}
-
         </div>
 
         <div>
@@ -120,7 +105,6 @@ export default function Album() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-
           <p>{album.total_tracks} total tracks</p>
         </div>
       </div>
@@ -133,7 +117,6 @@ export default function Album() {
             <TableRow>
               <TableHead className="w-[50px]">#</TableHead>
               <TableHead>Track Name</TableHead>
-              {/* <TableHead>Artists</TableHead> */}
               <TableHead className="text-right">Duration (min)</TableHead>
             </TableRow>
           </TableHeader>
@@ -142,7 +125,6 @@ export default function Album() {
               <TableRow key={track.id}>
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell>{track.name}</TableCell>
-                {/* <TableCell>{track.artists}</TableCell> */}
                 <TableCell className="text-right">{(track.duration / 60000).toFixed(2)}</TableCell>
               </TableRow>
             ))}
@@ -151,11 +133,15 @@ export default function Album() {
       ) : (
         <p>No tracks available</p>
       )}
+    </div>
+  );
+};
 
-
-      <ul>
-
-      </ul>
-    </div >
+// Main Album page component with Suspense boundary
+export default function Album() {
+  return (
+    <Suspense fallback={'Loading...'}>
+      <AlbumContent />
+    </Suspense>
   );
 }
