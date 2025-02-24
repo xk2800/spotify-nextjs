@@ -14,7 +14,7 @@ import { Suspense, useEffect, useState } from "react";
 // AlbumContent component that uses useSearchParams
 const AlbumContent = () => {
   const searchParams = useSearchParams();
-  const albumId = searchParams.get("id");
+  const albumId = searchParams.get("AlbumId");
   const router = useRouter();
 
   interface Album {
@@ -29,6 +29,8 @@ const AlbumContent = () => {
     total_tracks: string;
     copyrights: string;
     release_date: string;
+    mainArtist: string,
+    artistProfileImage: string,
   }
 
   const [album, setAlbum] = useState<Album | null>(null);
@@ -45,7 +47,7 @@ const AlbumContent = () => {
     const fetchAlbum = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/tracks?id=${albumId}`);
+        const res = await fetch(`/api/tracks?AlbumId=${albumId}`);
 
         if (!res.ok) {
           const errorData = await res.json();
@@ -81,12 +83,12 @@ const AlbumContent = () => {
           >
             <MoveLeft />
           </motion.div>
-          Back to Albums
+          Back to Dashboard
         </Button>
       </motion.div>
 
-      <div className="flex">
-        <div>
+      <div className="mt-5">
+        <div className="flex justify-center mb-5">
           {album.imageUrl ? (
             <Image src={album.imageUrl} alt={album.name || "Album Cover"} width={300} height={300} />
           ) : (
@@ -94,45 +96,51 @@ const AlbumContent = () => {
           )}
         </div>
 
-        <div>
-          <h1>{album.name || "Unknown Album"}</h1>
-          <p>{album.tracks[0].artists}</p>
+        <div className="font-medium">
+          <h1 className="text-4xl font-bold">{album.name || "Unknown Album"}</h1>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>{album.release_date.slice(0, 4)}</TooltipTrigger>
+              <TooltipTrigger className="text-xs">{album.release_date.slice(0, 4)}</TooltipTrigger>
               <TooltipContent>
                 <p>{format(new Date(album.release_date), "do MMM yyyy")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <p>{album.total_tracks} total tracks</p>
+          <div className="text-xs">{album.total_tracks} tracks to possibly groove to</div>
+
+          <div className="flex items-center gap-4 mt-5">
+            <Image src={album.artistProfileImage} width={60} height={60} alt={album.mainArtist} className="rounded-md" />
+            {album.mainArtist}
+          </div>
         </div>
       </div>
 
-      <h2>Tracks:</h2>
-      {album.tracks.length > 0 ? (
-        <Table className="bg-black/30">
-          <TableCaption>{album.copyrights}</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[50px]">#</TableHead>
-              <TableHead>Track Name</TableHead>
-              <TableHead className="text-right">Duration (min)</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {album.tracks.map((track, index) => (
-              <TableRow key={track.id}>
-                <TableCell className="font-medium">{index + 1}</TableCell>
-                <TableCell>{track.name}</TableCell>
-                <TableCell className="text-right">{(track.duration / 60000).toFixed(2)}</TableCell>
+      <div className="my-7">
+        <h2 className="mb-4">What&apos;s in this album?</h2>
+        {album.tracks.length > 0 ? (
+          <Table className="bg-black/30">
+            <TableCaption>{album.copyrights}</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[50px]">#</TableHead>
+                <TableHead>Track Name</TableHead>
+                <TableHead className="text-center w-[160px]">Duration (min)</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <p>No tracks available</p>
-      )}
+            </TableHeader>
+            <TableBody>
+              {album.tracks.map((track, index) => (
+                <TableRow key={track.id}>
+                  <TableCell className="font-medium">{index + 1}</TableCell>
+                  <TableCell>{track.name}</TableCell>
+                  <TableCell className="text-center w-[160px]">{Math.floor(track.duration / 60000)}:{((track.duration % 60000) / 1000).toFixed(0).padStart(2, '0')}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <p>No tracks available</p>
+        )}
+      </div>
     </div>
   );
 };

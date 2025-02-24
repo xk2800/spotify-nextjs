@@ -130,7 +130,10 @@ export default function Dashboard() {
                 <p>{player.device.name}</p>
               </div>
             ) : (
-              <p>Hmm, nothing to see here, since you&apos;re not playing anything on Spotify</p>
+              <div>
+                <p>Hmm, nothing to see here, since you&apos;re not playing anything on Spotify.</p>
+                <p className="text-xs bg-primary inline-block text-primary hover:text-black cursor-pointer transition-colors px-3">Try playing something on spotify and see something appear here!</p>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -145,7 +148,7 @@ export default function Dashboard() {
           <CardContent>
             <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {albums.map((album) => (
-                <Link key={album.album.id} href={`/album?id=${album.album.id}`}>
+                <Link key={album.album.id} href={`/album?AlbumId=${album.album.id}`}>
                   <motion.li
                     variants={{ hover: { x: -5 } }}
                     transition={{ type: "spring", stiffness: 300 }}

@@ -21,7 +21,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   console.log(searchParams);
 
-  const albumId = searchParams.get("id");
+  const albumId = searchParams.get("AlbumId");
 
   if (!albumId) {
     return NextResponse.json({ error: "Album ID is required" }, { status: 400 });
@@ -59,8 +59,26 @@ export async function GET(req: Request) {
 
     const tracksData = await tracksResponse.json();
 
+
+    // Fetch Artist
+    const artistsResponse = await fetch(`https://api.spotify.com/v1/artists/${albumData.artists?.[0]?.id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!artistsResponse.ok) {
+      return NextResponse.json({ error: "Failed to fetch album artists" }, { status: tracksResponse.status });
+    }
+
+    const artistsData = await artistsResponse.json();
+
+    console.log(artistsData.images?.[0].url);
+
     return NextResponse.json({
       name: albumData.name,
+      mainArtist: albumData.artists?.[0]?.name,
       copyrights: albumData.copyrights?.[0]?.text,
       total_tracks: albumData.total_tracks,
       release_date: albumData.release_date,
@@ -71,6 +89,9 @@ export async function GET(req: Request) {
         artists: track.artists.map((artist: Artist) => artist.name).join(", "), // Combine multiple artists
         duration: track.duration_ms,
       })),
+
+      // Artist
+      artistProfileImage: artistsData.images?.[0].url
     });
 
   } catch (error) {
