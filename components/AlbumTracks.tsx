@@ -2,17 +2,17 @@
 import { Suspense } from 'react';
 // import { TracksResponse } from './types';
 
-/*
+
 interface TracksResponse {
-  items: {
-    id: string;
-    name: string;
-    duration_ms: number;
-    // Add other track properties as needed
-  }[];
+  // items: {
+  id: string;
+  name: string;
+  duration_ms: number;
+  // Add other track properties as needed
+  // }[];
   // Add other response properties as needed
 }
-*/
+
 
 async function getTracks(albumId: string) {
   const response = await fetch(`/api/albums/${albumId}/tracks`, {
@@ -31,7 +31,7 @@ async function Tracks({ albumId }: { albumId: string }) {
 
   return (
     <div className="space-y-2">
-      {tracks.items.map((track: any) => (
+      {tracks.items.map((track: TracksResponse) => (
         <div key={track.id} className="p-4 border rounded">
           <h3 className="font-medium">{track.name}</h3>
           <p className="text-sm text-gray-600">
