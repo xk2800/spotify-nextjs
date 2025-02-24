@@ -63,6 +63,7 @@ export async function GET(req: Request) {
       name: albumData.name,
       copyrights: albumData.copyrights?.[0]?.text,
       total_tracks: albumData.total_tracks,
+      release_date: albumData.release_date,
       imageUrl: albumData.images?.[0]?.url || null, // Get the album cover image
       tracks: (tracksData as TracksData).items.map((track: Track) => ({
         id: track.id,

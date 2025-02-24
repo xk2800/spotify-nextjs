@@ -12,10 +12,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { MoveLeft } from "lucide-react";
 import { motion } from 'framer-motion';
 import Image from "next/image";
-
+import { format } from "date-fns";
 
 export default function Album() {
   const searchParams = useSearchParams();
@@ -32,6 +38,7 @@ export default function Album() {
     }[];
     total_tracks: string,
     copyrights: string,
+    release_date: string,
   }
 
   const [album, setAlbum] = useState<Album | null>(null);
@@ -92,24 +99,41 @@ export default function Album() {
         </Button>
       </motion.div>
 
-      <h1>{album.name || "Unknown Album"}</h1>
+      <div className="flex">
+        <div>
+          {album.imageUrl ? (
+            <Image src={album.imageUrl} alt={album.name || "Album Cover"} width={300} height={300} />
+          ) : (
+            <p>No album image available</p>
+          )}
 
-      {album.imageUrl ? (
-        <Image src={album.imageUrl} alt={album.name || "Album Cover"} width={300} />
-      ) : (
-        <p>No album image available</p>
-      )}
-      {album.total_tracks} total tracks <br />
+        </div>
+
+        <div>
+          <h1>{album.name || "Unknown Album"}</h1>
+          <p>{album.tracks[0].artists}</p>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>{album.release_date.slice(0, 4)}</TooltipTrigger>
+              <TooltipContent>
+                <p>{format(new Date(album.release_date), "do MMM yyyy")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <p>{album.total_tracks} total tracks</p>
+        </div>
+      </div>
 
       <h2>Tracks:</h2>
       {album.tracks.length > 0 ? (
-        <Table>
+        <Table className="bg-black/30">
           <TableCaption>{album.copyrights}</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[50px]">#</TableHead>
               <TableHead>Track Name</TableHead>
-              <TableHead>Artists</TableHead>
+              {/* <TableHead>Artists</TableHead> */}
               <TableHead className="text-right">Duration (min)</TableHead>
             </TableRow>
           </TableHeader>
@@ -118,7 +142,7 @@ export default function Album() {
               <TableRow key={track.id}>
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell>{track.name}</TableCell>
-                <TableCell>{track.artists}</TableCell>
+                {/* <TableCell>{track.artists}</TableCell> */}
                 <TableCell className="text-right">{(track.duration / 60000).toFixed(2)}</TableCell>
               </TableRow>
             ))}

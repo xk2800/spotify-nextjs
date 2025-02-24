@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
+import { motion } from 'framer-motion';
 
 interface SpotifyProfile {
   display_name: string;
@@ -124,12 +124,14 @@ export default function Dashboard() {
             <CardTitle>Player Information</CardTitle>
           </CardHeader>
           <CardContent>
-            {player &&
+            {player ? (
               <div>
                 <p>Media currently playing on:</p>
                 <p>{player.device.name}</p>
               </div>
-            }
+            ) : (
+              <p>Hmm, nothing to see here, since you&apos;re not playing anything on Spotify</p>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -141,25 +143,28 @@ export default function Dashboard() {
             <CardDescription>Let&apos;s see what albums have you saved recently</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="grid grid-cols-2 md:grid-cols-7 gap-4">
+            <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {albums.map((album) => (
                 <Link key={album.album.id} href={`/album?id=${album.album.id}`}>
-                  <li>
+                  <motion.li
+                    variants={{ hover: { x: -5 } }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
                     <p className="hidden">{album.album.external_urls.spotify}</p>
                     <Image
                       src={album.album.images[0]?.url}
                       alt={album.album.name}
-                      width={100}
-                      height={100}
+                      width={1000}
+                      height={1000}
                     />
                     <div className="flex flex-col">
-                      <span className="truncate overflow-hidden">{album.album.name}</span>
+                      <span className="truncate overflow-hidden text-lg">{album.album.name}</span>
                       <span className="text-xs -mt-1">by {album.album.artists[0]?.name}</span>
                     </div>
-                  </li>
+                  </motion.li>
                 </Link>
               ))}
-            </ul>
+            </motion.ul>
           </CardContent>
           <CardFooter>
             <p>Card Footer</p>
