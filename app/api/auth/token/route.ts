@@ -1,12 +1,12 @@
 // app/api/auth/token/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID!;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET!;
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("spotify_refresh_token")?.value;
 
