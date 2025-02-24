@@ -31,8 +31,9 @@ export async function GET() {
     }
 
     const { access_token, expires_in } = await response.json();
+    const cookieStore = await cookies();
 
-    await cookies().set("spotify_token", access_token, {
+    cookieStore.set("spotify_token", access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: expires_in,

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-const BlobBackground = ({ children }) => {
+const BlobBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize with null to prevent hydration mismatch
   const [scale, setScale] = useState(1);
   const [scroll, setScroll] = useState(0);
