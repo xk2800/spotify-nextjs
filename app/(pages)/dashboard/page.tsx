@@ -31,6 +31,14 @@ interface SpotifyPlayer {
   device: {
     name: string;
   };
+  item: {
+    album: {
+      images: {
+        url: string,
+      }[];
+      name: string
+    };
+  };
 }
 
 interface SpotifyAlbum {
@@ -48,6 +56,7 @@ interface SpotifyAlbum {
 export default function Dashboard() {
   const [profile, setProfile] = useState<SpotifyProfile | null>(null);
   const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
+
   const [albums, setAlbums] = useState<SpotifyAlbum[]>([]);
 
   useEffect(() => {
@@ -126,6 +135,8 @@ export default function Dashboard() {
           <CardContent>
             {player ? (
               <div>
+                <Image src={player.item.album.images?.[0]?.url} alt={player.item.album.name} width={300} height={300} />
+                <p>{player.item.album.name}</p>
                 <p>Media currently playing on:</p>
                 <p>{player.device.name}</p>
               </div>
