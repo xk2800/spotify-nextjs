@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
+import defaultProfilePic from '@/public/default-profile-pic.jpg'
 
 interface SpotifyProfile {
   display_name: string;
@@ -103,7 +104,7 @@ export default function Dashboard() {
   }, []);
 
   if (!profile) return <p>Loading...</p>;
-  if (albums.length === 0) return <p>No saved albums found.</p>; // ✅ Now this won't crash
+  // if (albums.length === 0) return <p>No saved albums found.</p>; // ✅ Now this won't crash
 
   return (
     <div className="flex flex-col gap-5">
@@ -114,8 +115,10 @@ export default function Dashboard() {
             <CardDescription>Here is a quick glimpse of your spotify profile</CardDescription>
           </CardHeader>
           <CardContent>
-            {profile.images?.[0]?.url && (
+            {profile.images?.[0]?.url ? (
               <Image src={profile.images[0].url} alt="Profile" width={100} height={100} priority />
+            ) : (
+              <Image src={defaultProfilePic} alt="Profile" width={100} height={100} priority />
             )}
             <Badge variant={"default"} className="capitalize mt-2">{profile.product}</Badge>
             <p>Email: {profile.email}</p>
@@ -157,28 +160,35 @@ export default function Dashboard() {
             <CardDescription>Let&apos;s see what albums have you saved recently</CardDescription>
           </CardHeader>
           <CardContent>
-            <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {albums.map((album) => (
-                <Link key={album.album.id} href={`/album?AlbumId=${album.album.id}`}>
-                  <motion.li
-                    variants={{ hover: { x: -5 } }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <p className="hidden">{album.album.external_urls.spotify}</p>
-                    <Image
-                      src={album.album.images[0]?.url}
-                      alt={album.album.name}
-                      width={1000}
-                      height={1000}
-                    />
-                    <div className="flex flex-col">
-                      <span className="truncate overflow-hidden text-lg">{album.album.name}</span>
-                      <span className="text-xs -mt-1">by {album.album.artists[0]?.name}</span>
-                    </div>
-                  </motion.li>
-                </Link>
-              ))}
-            </motion.ul>
+            {albums.length > 0 ? (
+              <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {albums.map((album) => (
+                  <Link key={album.album.id} href={`/album?AlbumId=${album.album.id}`}>
+                    <motion.li
+                      variants={{ hover: { x: -5 } }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <p className="hidden">{album.album.external_urls.spotify}</p>
+                      <Image
+                        src={album.album.images[0]?.url}
+                        alt={album.album.name}
+                        width={1000}
+                        height={1000}
+                      />
+                      <div className="flex flex-col">
+                        <span className="truncate overflow-hidden text-lg">{album.album.name}</span>
+                        <span className="text-xs -mt-1">by {album.album.artists[0]?.name}</span>
+                      </div>
+                    </motion.li>
+                  </Link>
+                ))}
+              </motion.ul>
+            ) : (
+              <div>
+                <p>Hmm, it seems like you didn&apos;t save any albums yet.</p>
+                <p className="text-xs bg-primary inline-block text-primary hover:text-black cursor-pointer transition-colors px-3">Try adding an album on spotify and see something appear here!</p>
+              </div>
+            )}
           </CardContent>
           <CardFooter>
             <p>Card Footer</p>
