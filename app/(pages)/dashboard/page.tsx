@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 import defaultProfilePic from '@/public/default-profile-pic.jpg'
+import Loading from "@/components/Loading";
 
 interface SpotifyProfile {
   display_name: string;
@@ -103,7 +104,8 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  if (!profile) return <p>Loading...</p>;
+  // if (!profile) return <p>Loading...</p>;
+  if (!profile) return <Loading />;
   // if (albums.length === 0) return <p>No saved albums found.</p>; // ✅ Now this won't crash
 
   return (

@@ -81,7 +81,7 @@ const BlobBackground: React.FC<{ children: React.ReactNode }> = ({ children }) =
       {renderBlob}
 
       {/* Content container */}
-      <div className="relative z-10 min-h-screen">
+      <div className="relative z-10 min-h-screen py-10">
         {children}
       </div>
     </div>

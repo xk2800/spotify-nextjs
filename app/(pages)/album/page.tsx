@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -9,7 +10,6 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-// import { Loading } from "@/components/loading"; // You'll need to create this component
 
 // AlbumContent component that uses useSearchParams
 const AlbumContent = () => {
@@ -66,7 +66,7 @@ const AlbumContent = () => {
     fetchAlbum();
   }, [albumId]);
 
-  if (loading) return <p>Loading album...</p>;
+  if (loading) return <Loading />;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!album) return <p>No album found.</p>;
 

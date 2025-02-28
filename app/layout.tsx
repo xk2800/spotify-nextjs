@@ -28,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased container mx-auto text-white`}
       >
+        {/* ! TODO:Add cn function to enable className calls in BlobBackground  */}
         <BlobBackground>
           {children}
         </BlobBackground>
