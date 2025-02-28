@@ -12,7 +12,7 @@ export function middleware(req: NextRequest) {
   }
 
   // Protect certain routes, requiring authentication
-  const protectedRoutes = ["/dashboard"]; // Add more protected routes if needed
+  const protectedRoutes = ["/dashboard", '/album']; // Add more protected routes if needed
 
   if (protectedRoutes.includes(req.nextUrl.pathname) && !token) {
     return NextResponse.redirect(new URL("/", req.url)); // Redirect to home page
@@ -23,5 +23,5 @@ export function middleware(req: NextRequest) {
 
 // Apply middleware only to protected routes
 export const config = {
-  matcher: ["/", "/dashboard/:path*"], // Add more paths if needed
+  matcher: ["/", "/dashboard/:path*", '/album/:path*'], // Add more paths if needed
 };
