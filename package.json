@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
-    "build": "next build",
+    "vercel-build": "next build",
+    "build": "npm install --platform=linux --arch=x64 sharp && next build",
     "start": "next start",
     "lint": "next lint"
   },
