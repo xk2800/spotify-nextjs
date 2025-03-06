@@ -15,7 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
-import defaultProfilePic from '@/public/default-profile-pic.jpg'
+import defaultProfilePic from '@/public/default-profile-pic.jpeg'
 import Loading from "@/components/Loading";
 
 interface SpotifyProfile {
