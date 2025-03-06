@@ -88,14 +88,14 @@ export default function Dashboard() {
           console.error("Failed to load profile");
         }
 
-        if (playerRes.ok) {
-          const playerData = await playerRes.json();
-          if (playerData && Object.keys(playerData).length > 0 && !playerData.error) {
-            setPlayer(playerData);
-          } else {
-            console.log("No active player found, skipping update.");
-          }
-        }
+        // if (playerRes.ok) {
+        //   const playerData = await playerRes.json();
+        //   if (playerData && Object.keys(playerData).length > 0 && !playerData.error) {
+        //     setPlayer(playerData);
+        //   } else {
+        //     console.log("No active player found, skipping update.");
+        //   }
+        // }
 
         if (albumsRes.ok) {
           const albumsData: AlbumsResponse = await albumsRes.json();
@@ -116,6 +116,30 @@ export default function Dashboard() {
     }
 
     fetchData();
+
+    async function fetchPlayer() {
+      try {
+        const playerRes = await fetch("/api/auth/player");
+        if (playerRes.ok) {
+          const playerData = await playerRes.json();
+          if (playerData && Object.keys(playerData).length > 0 && !playerData.error) {
+            setPlayer(playerData);
+          } else {
+            setPlayer(null); // Clear player state when nothing is playing
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching player data:", error);
+      }
+    }
+
+    // Initial fetch
+    fetchPlayer();
+
+    // Poll every 5 seconds
+    const interval = setInterval(fetchPlayer, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const loadMoreAlbums = async () => {
@@ -237,7 +261,7 @@ export default function Dashboard() {
                     <Button
                       onClick={loadMoreAlbums}
                       disabled={isLoadingMore}
-                      variant="outline"
+                    // variant="secondary"
                     >
                       {isLoadingMore ? "Loading..." : "Load More Albums"}
                     </Button>
@@ -251,9 +275,9 @@ export default function Dashboard() {
               </div>
             )}
           </CardContent>
-          <CardFooter>
+          {/* <CardFooter>
             <p>Card Footer</p>
-          </CardFooter>
+          </CardFooter> */}
         </Card>
       </div>
     </div>
