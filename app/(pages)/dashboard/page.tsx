@@ -55,11 +55,21 @@ interface SpotifyAlbum {
   };
 }
 
+interface AlbumsResponse {
+  items: SpotifyAlbum[];
+  next: string | null;
+  total: number;
+}
+
 export default function Dashboard() {
   const [profile, setProfile] = useState<SpotifyProfile | null>(null);
   const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
 
   const [albums, setAlbums] = useState<SpotifyAlbum[]>([]);
+  const [nextUrl, setNextUrl] = useState<string | null>(null);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalAlbums, setTotalAlbums] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -67,8 +77,7 @@ export default function Dashboard() {
         const [profileRes, playerRes, albumsRes] = await Promise.all([
           fetch("/api/auth/profile"),
           fetch("/api/auth/player"),
-          // fetch("/api/auth/albums"),
-          fetch("/server/albums"),
+          fetch("/api/auth/albums?offset=0&limit=8"),
         ]);
 
         if (profileRes.ok) {
@@ -87,26 +96,52 @@ export default function Dashboard() {
         }
 
         if (albumsRes.ok) {
-          const albumsData = await albumsRes.json();
-          setAlbums(Array.isArray(albumsData.items) ? albumsData.items : []); // ✅ Ensures albums is always an array
-          console.log(albumsData);
-
+          const albumsData: AlbumsResponse = await albumsRes.json();
+          setAlbums(Array.isArray(albumsData.items) ? albumsData.items : []);
+          setNextUrl(albumsData.next);
+          setTotalAlbums(albumsData.total || 0);
+          setHasMore(!!albumsData.next);
         } else {
           console.error("Failed to load albums");
-          setAlbums([]); // ✅ Fallback to empty array
+          setAlbums([]);
+          setHasMore(false);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setAlbums([]); // ✅ Fallback to empty array on error
+        setAlbums([]);
+        setHasMore(false);
       }
     }
 
     fetchData();
   }, []);
 
-  // if (!profile) return <p>Loading...</p>;
+  const loadMoreAlbums = async () => {
+    if (!hasMore || isLoadingMore) return;
+
+    setIsLoadingMore(true);
+    try {
+      const offset = albums.length;
+      const response = await fetch(`/api/auth/albums?offset=${offset}&limit=8`);
+
+      if (response.ok) {
+        const data: AlbumsResponse = await response.json();
+        setAlbums(prev => [...prev, ...(Array.isArray(data.items) ? data.items : [])]);
+        setNextUrl(data.next);
+        setHasMore(!!data.next);
+      } else {
+        console.error("Failed to load more albums");
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Error loading more albums:", error);
+      setHasMore(false);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
   if (!profile) return <Loading />;
-  // if (albums.length === 0) return <p>No saved albums found.</p>; // ✅ Now this won't crash
 
   return (
     <div className="flex flex-col gap-5">
@@ -163,28 +198,50 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             {albums.length > 0 ? (
-              <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {albums.map((album) => (
-                  <Link key={album.album.id} href={`/album?AlbumId=${album.album.id}`}>
-                    <motion.li
-                      variants={{ hover: { x: -5 } }}
-                      transition={{ type: "spring", stiffness: 300 }}
+              <>
+                <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {albums.map((album) => (
+                    <Link key={album.album.id} href={`/album?AlbumId=${album.album.id}`}>
+                      <motion.li
+                        variants={{ hover: { x: -5 } }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <p className="hidden">{album.album.external_urls.spotify}</p>
+                        <Image
+                          src={album.album.images[0]?.url}
+                          alt={album.album.name}
+                          width={1000}
+                          height={1000}
+                        />
+                        <div className="flex flex-col">
+                          <span className="truncate overflow-hidden text-lg">{album.album.name}</span>
+                          <span className="text-xs -mt-1">by {album.album.artists[0]?.name}</span>
+                        </div>
+                      </motion.li>
+                    </Link>
+                  ))}
+                </motion.ul>
+
+                {albums.length > 0 && (
+                  <div className="mt-6 flex justify-center">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Showing {albums.length} of {totalAlbums} albums
+                    </p>
+                  </div>
+                )}
+
+                {hasMore && (
+                  <div className="mt-2 flex justify-center">
+                    <Button
+                      onClick={loadMoreAlbums}
+                      disabled={isLoadingMore}
+                      variant="outline"
                     >
-                      <p className="hidden">{album.album.external_urls.spotify}</p>
-                      <Image
-                        src={album.album.images[0]?.url}
-                        alt={album.album.name}
-                        width={1000}
-                        height={1000}
-                      />
-                      <div className="flex flex-col">
-                        <span className="truncate overflow-hidden text-lg">{album.album.name}</span>
-                        <span className="text-xs -mt-1">by {album.album.artists[0]?.name}</span>
-                      </div>
-                    </motion.li>
-                  </Link>
-                ))}
-              </motion.ul>
+                      {isLoadingMore ? "Loading..." : "Load More Albums"}
+                    </Button>
+                  </div>
+                )}
+              </>
             ) : (
               <div>
                 <p>Hmm, it seems like you didn&apos;t save any albums yet.</p>
@@ -196,8 +253,6 @@ export default function Dashboard() {
             <p>Card Footer</p>
           </CardFooter>
         </Card>
-
-
       </div>
     </div>
   );
