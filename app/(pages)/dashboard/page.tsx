@@ -15,7 +15,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
-import defaultProfilePic from '@/public/default-profile-pic.jpeg'
+// import defaultProfilePic from '@/public/default-profile-pic.jpeg'
+// import defaultProfilePic from 'https://res.cloudinary.com/dstyssopl/image/upload/v1741248395/default-profile-pic_swvgmz.jpg'
 import Loading from "@/components/Loading";
 
 interface SpotifyProfile {
@@ -155,7 +156,7 @@ export default function Dashboard() {
             {profile.images?.[0]?.url ? (
               <Image src={profile.images[0].url} alt="Profile" width={100} height={100} priority />
             ) : (
-              <Image src={defaultProfilePic} alt="Profile" width={100} height={100} priority />
+              <Image src={'https://res.cloudinary.com/dstyssopl/image/upload/v1741248395/default-profile-pic_swvgmz.jpg'} alt="Profile" width={100} height={100} priority />
             )}
             <Badge variant={"default"} className="capitalize mt-2">{profile.product}</Badge>
             <p>Email: {profile.email}</p>
