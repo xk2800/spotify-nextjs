@@ -23,8 +23,8 @@ export default function Dashboard() {
     async function fetchData() {
       try {
         const [profileRes, albumsRes] = await Promise.all([
-          fetch("/api/auth/profile"),
-          fetch("/api/auth/albums?offset=0&limit=8"),
+          fetch("/api/profile"),
+          fetch("/api/albums?offset=0&limit=8"),
         ]);
 
         if (profileRes.ok) {
@@ -55,7 +55,7 @@ export default function Dashboard() {
 
     async function fetchPlayer() {
       try {
-        const playerRes = await fetch("/api/auth/player");
+        const playerRes = await fetch("/api/player");
         if (playerRes.ok) {
           const playerData = await playerRes.json();
           if (playerData && Object.keys(playerData).length > 0 && !playerData.error) {
