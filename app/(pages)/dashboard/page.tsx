@@ -84,7 +84,7 @@ export default function Dashboard() {
     setIsLoadingMore(true);
     try {
       const offset = albums.length;
-      const response = await fetch(`/api/auth/albums?offset=${offset}&limit=8`);
+      const response = await fetch(`/api/albums?offset=${offset}&limit=8`);
 
       if (response.ok) {
         const data: AlbumsResponse = await response.json();

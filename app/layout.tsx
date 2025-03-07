@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BlobBackground from "@/components/BlobBackground";
+import Nav from "@/components/Nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,11 +19,7 @@ export const metadata: Metadata = {
   description: "All things about your spotify profile",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body
@@ -30,6 +27,7 @@ export default function RootLayout({
       >
         {/* ! TODO:Add cn function to enable className calls in BlobBackground  */}
         <BlobBackground>
+          <Nav />
           {children}
         </BlobBackground>
       </body>
