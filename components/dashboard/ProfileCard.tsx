@@ -19,14 +19,21 @@ interface ProfileCardProps {
 
 const ProfileCard = ({ profile }: ProfileCardProps) => {
   return (
-    <Card className="md:col-span-3">
+    <Card className="lg:col-span-3">
       <CardHeader>
         <CardTitle>Welcome, {profile.display_name}</CardTitle>
         <CardDescription>Here is a quick glimpse of your spotify profile</CardDescription>
       </CardHeader>
       <CardContent>
         {profile.images?.[0]?.url ? (
-          <Image src={profile.images[0].url} alt="Profile" width={100} height={100} priority />
+          <Image
+            src={profile.images[0].url}
+            alt="Profile"
+            width={100}
+            height={100}
+            priority
+            className="rounded-lg"
+          />
         ) : (
           <Image
             src={'https://res.cloudinary.com/dstyssopl/image/upload/v1741248395/default-profile-pic_swvgmz.jpg'}
@@ -34,6 +41,7 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
             width={100}
             height={100}
             priority
+            className="rounded-lg"
           />
         )}
         <Badge variant={"default"} className="capitalize mt-2">{profile.product}</Badge>

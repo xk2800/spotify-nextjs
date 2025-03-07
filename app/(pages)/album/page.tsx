@@ -90,7 +90,13 @@ const AlbumContent = () => {
       <div className="mt-5">
         <div className="flex justify-center mb-5">
           {album.imageUrl ? (
-            <Image src={album.imageUrl} alt={album.name || "Album Cover"} width={300} height={300} />
+            <Image
+              src={album.imageUrl}
+              alt={album.name || "Album Cover"}
+              width={300}
+              height={300}
+              className="rounded-lg"
+            />
           ) : (
             <p>No album image available</p>
           )}
@@ -109,7 +115,7 @@ const AlbumContent = () => {
           <div className="text-xs">{album.total_tracks} tracks to possibly groove to</div>
 
           <div className="flex items-center gap-4 mt-5">
-            <Image src={album.artistProfileImage} width={60} height={60} alt={album.mainArtist} className="rounded-md" />
+            <Image src={album.artistProfileImage} width={60} height={60} alt={album.mainArtist} className="rounded-lg" />
             {album.mainArtist}
           </div>
         </div>

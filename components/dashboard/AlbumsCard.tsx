@@ -49,6 +49,7 @@ export default function AlbumsCard({
                       alt={album.album.name}
                       width={1000}
                       height={1000}
+                      className="rounded-lg"
                     />
                     <div className="flex flex-col">
                       <span className="truncate overflow-hidden text-lg">{album.album.name}</span>

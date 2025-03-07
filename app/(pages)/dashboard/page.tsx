@@ -107,7 +107,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="grid md:grid-cols-4 gap-4 md:justify-between">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 md:justify-between">
         <ProfileCard profile={profile} />
         <PlayerCard player={player} />
       </div>

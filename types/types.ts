@@ -16,6 +16,8 @@ export interface SpotifyPlayer {
     name: string;
   };
   item: {
+    name: string
+    artists: { name: string; }[];
     album: {
       images: {
         url: string;
