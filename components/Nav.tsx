@@ -32,7 +32,7 @@ const Nav: React.FC = () => {
 
       setIsAuthenticated(false);
       router.push("/"); // Redirect to homepage
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Error logging out:", error);
     }
