@@ -2,26 +2,53 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// ----- Configuration -----
+// Define all routes in one place - outside the function
+const ROUTES = {
+  HOME: "/",
+  PROTECTED: [
+    "/dashboard",
+    "/album",
+    "/time-machine",
+    // Add new protected routes here
+  ]
+};
+
+/**
+ * Authentication middleware for Spotify integration
+ * Handles route protection and redirects based on authentication status
+ */
 export function middleware(req: NextRequest) {
+  // Extract authentication token from cookies
   const token = req.cookies.get("spotify_token")?.value;
   const { pathname } = req.nextUrl;
 
-  // Redirect logged-in users away from the login page
-  if (pathname === "/" && token) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+  // ----- Redirect Logic -----
+  // Redirect authenticated users away from login page to dashboard
+  if (pathname === ROUTES.HOME && token) {
+    return NextResponse.redirect(new URL(ROUTES.PROTECTED[0], req.url));
   }
 
-  // Protect certain routes, requiring authentication
-  const protectedRoutes = ["/dashboard", '/album', '/time-machine']; // Add more protected routes if needed
+  // Check if current path is a protected route
+  const isProtectedRoute = ROUTES.PROTECTED.some(route =>
+    pathname === route || pathname.startsWith(`${route}/`)
+  );
 
-  if (protectedRoutes.includes(req.nextUrl.pathname) && !token) {
-    return NextResponse.redirect(new URL("/", req.url)); // Redirect to home page
+  // Redirect unauthenticated users trying to access protected routes
+  if (isProtectedRoute && !token) {
+    return NextResponse.redirect(new URL(ROUTES.HOME, req.url));
   }
 
+  // Allow the request to proceed
   return NextResponse.next();
 }
 
-// Apply middleware only to protected routes
+/**
+ * Matcher configuration for the middleware
+ */
 export const config = {
-  matcher: ["/", "/dashboard/:path*", '/album/:path*', '/time-machine/:path*'], // Add more paths if needed
+  matcher: [
+    ROUTES.HOME,
+    ...ROUTES.PROTECTED.map(route => `${route}/:path*`)
+  ]
 };
