@@ -5,7 +5,7 @@ import TimeMachine from "@/components/TimeMachine";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 
 interface Artist {
   id: string;
@@ -32,7 +32,7 @@ interface CachedData {
   }
 }
 
-const TimeMachinePage = () => {
+function TimeMachineContent() {
   const searchParams = useSearchParams()
   const duration = searchParams.get('Duration') || 'medium_term'
   const router = useRouter()
@@ -232,13 +232,21 @@ const TimeMachinePage = () => {
           <Button
             onClick={loadMore}
             disabled={loadingMore}
-          // className="px-4 py-2"
           >
             {loadingMore ? 'Loading...' : 'Load More'}
           </Button>
         </div>
       )}
     </div>
+  );
+}
+
+// Main component with Suspense wrapper
+const TimeMachinePage = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <TimeMachineContent />
+    </Suspense>
   );
 }
 
