@@ -30,28 +30,24 @@ const Nav: React.FC = () => {
       const res = await fetch("/api/auth/logout", { method: "POST" });
       if (!res.ok) throw new Error("Logout failed");
 
-      // Make sure we navigate before changing the auth state
-      await router.push("/");
-
-      // Update auth state after navigation is initiated
       setIsAuthenticated(false);
+      router.push("/"); // Redirect to homepage
+      window.location.reload();
     } catch (error) {
       console.error("Error logging out:", error);
     }
   };
 
+  if (!isAuthenticated) return null; // Hide Nav if user is not authenticated
+
   return (
-    <>
-      {isAuthenticated && (
-        <nav className="flex justify-between items-center">
-          <div><Link href={'/'}>Nav</Link></div>
-          <div>
-            <Link href={'/time-machine'}>New Feature</Link>
-            <Button variant={'ghost'} onClick={handleLogout}>Logout</Button>
-          </div>
-        </nav>
-      )}
-    </>
+    <nav className="flex justify-between items-center">
+      <div><Link href={'/'}>Nav</Link></div>
+      <div>
+        <Link href={'/time-machine'}>New Feature</Link>
+        <Button variant={'ghost'} onClick={handleLogout}>Logout</Button>
+      </div>
+    </nav>
   );
 };
 
