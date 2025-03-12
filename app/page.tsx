@@ -26,6 +26,7 @@ export default function Home() {
               Login with Spotify
             </Link>
           </Button>
+          <p className="text-xs pt-3">*Your data is not saved on our servers. <br /> It is to make the website work</p>
         </CardContent>
         <CardFooter>
           <p>Made with &#10084;&#65039; by <Link href={'https://xavierkhew.com'} target="_blank" className="font-medium">Xavier K.</Link></p>
