@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BlobBackground from "@/components/BlobBackground";
 import Nav from "@/components/Nav";
+import { Analytics } from "@vercel/analytics/react"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         {/* ! TODO:Add cn function to enable className calls in BlobBackground  */}
         <BlobBackground>
           <Nav />
+          <Analytics />
           {children}
         </BlobBackground>
       </body>
