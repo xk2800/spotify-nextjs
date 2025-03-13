@@ -45,10 +45,13 @@ export function middleware(req: NextRequest) {
 
 /**
  * Matcher configuration for the middleware
+ * Must be statically analyzable at compile time
  */
 export const config = {
   matcher: [
-    ROUTES.HOME,
-    ...ROUTES.PROTECTED.map(route => `${route}/:path*`)
+    '/',
+    '/dashboard/:path*',
+    '/album/:path*',
+    '/time-machine/:path*'
   ]
 };

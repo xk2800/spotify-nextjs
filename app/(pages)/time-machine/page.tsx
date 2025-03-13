@@ -4,6 +4,7 @@ import Loading from "@/components/Loading";
 import TimeMachine from "@/components/TimeMachine";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef, Suspense } from "react";
 
@@ -173,10 +174,11 @@ function TimeMachineContent() {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="pt-6">
       <h1 className="text-2xl font-bold mb-6">Your Time Machine</h1>
 
-      <div className="flex gap-2 mb-8">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-8"> */}
+      <div className="flex flex-col sm:flex-row gap-2 mb-8">
         <Badge
           className={`px-4 py-2 cursor-pointer ${duration === 'short_term' ? 'bg-primary font-bold' : 'bg-gray-600 hover:bg-secondary text-white hover:text-black'}`}
           onClick={() => handleTimeRangeChange('short_term')}
@@ -222,13 +224,13 @@ function TimeMachineContent() {
       )}
 
       {allItems.length > 0 && (
-        <div className="text-center mt-2 text-sm text-gray-500">
+        <div className="text-center text-sm text-gray-500 mt-6">
           Showing {allItems.length} of {timeMachineData?.total || 0} items
         </div>
       )}
 
       {hasMore && (
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-2">
           <Button
             onClick={loadMore}
             disabled={loadingMore}
@@ -245,7 +247,11 @@ function TimeMachineContent() {
 const TimeMachinePage = () => {
   return (
     <Suspense fallback={<Loading />}>
-      <TimeMachineContent />
+      <Card>
+        <CardContent>
+          <TimeMachineContent />
+        </CardContent>
+      </Card>
     </Suspense>
   );
 }
