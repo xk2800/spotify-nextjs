@@ -6,11 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SpotifyPlayer } from "@/types/types";
-
-interface PlayerCardProps {
-  player: SpotifyPlayer | null;
-}
+import { PlayerCardProps } from "@/types/types";
 
 export default function PlayerCard({ player }: PlayerCardProps) {
   return (

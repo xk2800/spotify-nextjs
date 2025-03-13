@@ -10,15 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SpotifyAlbum } from "@/types/types";
-
-interface AlbumsCardProps {
-  albums: SpotifyAlbum[];
-  totalAlbums: number;
-  hasMore: boolean;
-  isLoadingMore: boolean;
-  loadMoreAlbums: () => Promise<void>;
-}
+import { AlbumsCardProps } from "@/types/types";
 
 export default function AlbumsCard({
   albums,

@@ -1,20 +1,6 @@
+import { ArtistAPI, Track, TracksData } from "@/types/types";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-
-interface Artist {
-  name: string;
-}
-
-interface Track {
-  id: string;
-  name: string;
-  artists: Artist[];
-  duration_ms: number;
-}
-
-interface TracksData {
-  items: Track[];
-}
 
 
 export async function GET(req: Request) {
@@ -86,7 +72,7 @@ export async function GET(req: Request) {
       tracks: (tracksData as TracksData).items.map((track: Track) => ({
         id: track.id,
         name: track.name,
-        artists: track.artists.map((artist: Artist) => artist.name).join(", "), // Combine multiple artists
+        artists: track.artists.map((artist: ArtistAPI) => artist.name).join(", "), // Combine multiple artists
         duration: track.duration_ms,
       })),
 

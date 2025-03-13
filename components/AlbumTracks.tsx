@@ -1,17 +1,6 @@
 // components/AlbumTracks.tsx
+import { TracksResponse } from '@/types/types';
 import { Suspense } from 'react';
-// import { TracksResponse } from './types';
-
-
-interface TracksResponse {
-  // items: {
-  id: string;
-  name: string;
-  duration_ms: number;
-  // Add other track properties as needed
-  // }[];
-  // Add other response properties as needed
-}
 
 
 async function getTracks(albumId: string) {

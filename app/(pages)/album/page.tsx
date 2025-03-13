@@ -10,6 +10,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import type { Album } from "@/types/types";
 
 // AlbumContent component that uses useSearchParams
 const AlbumContent = () => {
@@ -17,21 +18,7 @@ const AlbumContent = () => {
   const albumId = searchParams.get("AlbumId");
   const router = useRouter();
 
-  interface Album {
-    name: string;
-    imageUrl: string | null;
-    tracks: {
-      id: string;
-      name: string;
-      artists: string;
-      duration: number;
-    }[];
-    total_tracks: string;
-    copyrights: string;
-    release_date: string;
-    mainArtist: string,
-    artistProfileImage: string,
-  }
+
 
   const [album, setAlbum] = useState<Album | null>(null);
   const [loading, setLoading] = useState(true);

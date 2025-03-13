@@ -67,6 +67,63 @@ export interface Artist {
   [key: string]: string | number | boolean | Array<{ url: string }> | string[] | undefined;
 }
 
+export interface ArtistAPI {
+  name: string;
+}
+
+export interface Track {
+  id: string;
+  name: string;
+  artists: ArtistAPI[];
+  duration_ms: number;
+}
+
+export interface TracksData {
+  items: Track[];
+}
+
+export interface Album {
+  name: string;
+  imageUrl: string | null;
+  tracks: {
+    id: string;
+    name: string;
+    artists: string;
+    duration: number;
+  }[];
+  total_tracks: string;
+  copyrights: string;
+  release_date: string;
+  mainArtist: string,
+  artistProfileImage: string,
+}
+
+export interface ProfileCardProps {
+  profile: SpotifyProfile;
+}
+
+export interface TracksResponse {
+  // items: {
+  id: string;
+  name: string;
+  duration_ms: number;
+  // Add other track properties as needed
+  // }[];
+  // Add other response properties as needed
+}
+
+export interface PlayerCardProps {
+  player: SpotifyPlayer | null;
+}
+
+export interface AlbumsCardProps {
+  albums: SpotifyAlbum[];
+  totalAlbums: number;
+  hasMore: boolean;
+  isLoadingMore: boolean;
+  loadMoreAlbums: () => Promise<void>;
+}
+
 export interface CachedData<T extends DataItem> {
   [key: string]: {
     data: PaginatedData<T> | null;

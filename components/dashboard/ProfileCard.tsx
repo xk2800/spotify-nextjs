@@ -11,11 +11,9 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SpotifyProfile } from "@/types/types";
+import { ProfileCardProps } from "@/types/types";
 
-interface ProfileCardProps {
-  profile: SpotifyProfile;
-}
+
 
 const ProfileCard = ({ profile }: ProfileCardProps) => {
   return (
