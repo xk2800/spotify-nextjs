@@ -60,7 +60,7 @@ const BlobBackground: React.FC<{ children: React.ReactNode }> = ({ children }) =
   // Don't render the blob until after mounting to prevent hydration mismatch
   const renderBlob = mounted && (
     <div
-      className="fixed rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 opacity-50 blur-3xl"
+      className="fixed rounded-full bg-linear-to-r from-purple-500 via-pink-500 to-red-500 opacity-50 blur-3xl"
       style={{
         width: `${blobSize}px`,
         height: `${blobSize}px`,
