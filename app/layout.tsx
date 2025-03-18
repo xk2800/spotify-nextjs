@@ -5,7 +5,7 @@ import BlobBackground from "@/components/BlobBackground";
 import Nav from "@/components/Nav";
 import { Analytics } from "@vercel/analytics/react"
 import { LogRocketProvider } from "@/utils/LogRocketProvider";
-import ErrorBoundary from "@/components/ErrorBoundary";
+// import ErrorBoundary from "@/components/ErrorBoundary";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +33,9 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
           <Nav />
           <Analytics />
           <LogRocketProvider>
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
+            {/* <ErrorBoundary> */}
+            {children}
+            {/* </ErrorBoundary> */}
           </LogRocketProvider>
         </BlobBackground>
       </body>
