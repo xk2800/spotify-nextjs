@@ -1,9 +1,9 @@
-// LogRocket.init('hu8af1/xavier');
 // app/providers/LogRocketProvider.tsx
 'use client';
 
 import LogRocket from 'logrocket';
 import { useEffect, ReactNode } from 'react';
+// Or alternatively import React from 'react';
 
 interface LogRocketProviderProps {
   children: ReactNode;
@@ -11,7 +11,7 @@ interface LogRocketProviderProps {
 
 export function LogRocketProvider({ children }: LogRocketProviderProps) {
   useEffect(() => {
-    LogRocket.init('hu8af1/xavier');
+    LogRocket.init('your-app/your-app-id');
 
     // Capture unhandled errors
     const handleError = (event: ErrorEvent) => {
@@ -38,5 +38,11 @@ export function LogRocketProvider({ children }: LogRocketProviderProps) {
     };
   }, []);
 
-  return <>{ children } </>;
+  // The simplest solution - just return the children directly
+  return children;
+
+  // If you need a wrapper, use the JSX element directly:
+  // return <Fragment>{children}</Fragment>;
+  // or
+  // return <>{children}</>;
 }
