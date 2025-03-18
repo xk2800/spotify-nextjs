@@ -11,7 +11,7 @@ interface LogRocketProviderProps {
 
 export function LogRocketProvider({ children }: LogRocketProviderProps) {
   useEffect(() => {
-    LogRocket.init('your-app/your-app-id');
+    LogRocket.init('hu8af1/xavier');
 
     // Capture unhandled errors
     const handleError = (event: ErrorEvent) => {
