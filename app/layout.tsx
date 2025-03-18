@@ -4,6 +4,7 @@ import "./globals.css";
 import BlobBackground from "@/components/BlobBackground";
 import Nav from "@/components/Nav";
 import { Analytics } from "@vercel/analytics/react"
+import LogRocket from "logrocket";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +22,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+  LogRocket.init('hu8af1/xavier');
+
   return (
     <html lang="en">
       <body
