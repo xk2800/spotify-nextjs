@@ -41,10 +41,16 @@ const Nav: React.FC = () => {
   if (!isAuthenticated) return null; // Hide Nav if user is not authenticated
 
   return (
-    <nav className="flex justify-between items-center">
-      <div><Link href={'/'}>Nav</Link></div>
+    <nav className="flex justify-between items-center mb-4">
       <div>
-        <Link href={'/time-machine'}>New Feature</Link>
+        <Button asChild variant={'ghost'}>
+          <Link href={'/'}>Profiler</Link>
+        </Button>
+      </div>
+      <div>
+        <Button asChild variant={'ghost'}>
+          <Link href={'/time-machine'} className="hover:cursor-default">Album Time Machine</Link>
+        </Button>
         <Button variant={'ghost'} onClick={handleLogout}>Logout</Button>
       </div>
     </nav>

@@ -47,7 +47,7 @@ const ProfileCard = ({ profile }: ProfileCardProps) => {
         <p>Spotify ID: {profile.id}</p>
       </CardContent>
       <CardFooter>
-        <Button asChild variant={'secondary'}>
+        <Button asChild variant={'secondary'} className="hover:scale-105">
           <Link href={profile.external_urls.spotify} target="_blank">
             Check out my Profile on Spotify
           </Link>

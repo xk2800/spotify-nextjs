@@ -63,7 +63,7 @@ const AlbumContent = () => {
         whileHover="hover"
         className="inline-flex items-center gap-2"
       >
-        <Button variant="link" onClick={() => router.back()} className="flex items-center gap-2 pl-2 hover:no-underline hover:text-[#1ED760]">
+        <Button variant="link" onClick={() => router.back()} className="flex items-center gap-2 pl-2 hover:no-underline hover:text-[#1ED760] hover:scale-100">
           <motion.div
             variants={{ hover: { x: -5 } }}
             transition={{ type: "spring", stiffness: 300 }}

@@ -28,9 +28,18 @@ export default function AlbumsCard({
       <CardContent>
         {albums.length > 0 ? (
           <>
-            <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <motion.ul className="grid grid-cols-2 md:grid-cols-4 gap-0">
               {albums.map((album) => (
-                <Link key={album.album.id} href={`/album?AlbumId=${album.album.id}`}>
+                // each individual album card
+                <Link
+                  key={album.album.id}
+                  href={`/album?AlbumId=${album.album.id}`}
+                  className="
+                  hover:shadow-xl hover:shadow-primary hover:-translate-2 hover:rounded-lg
+                  transition-all duration-300 ease-in-out
+                  p-4
+                  "
+                >
                   <motion.li
                     variants={{ hover: { x: -5 } }}
                     transition={{ type: "spring", stiffness: 300 }}
@@ -52,6 +61,7 @@ export default function AlbumsCard({
               ))}
             </motion.ul>
 
+            {/* on the based of the card */}
             {albums.length > 0 && (
               <div className="mt-6 flex justify-center">
                 <p className="text-sm text-muted-foreground mb-2">
@@ -60,11 +70,13 @@ export default function AlbumsCard({
               </div>
             )}
 
+            {/* load more button */}
             {hasMore && (
               <div className="mt-2 flex justify-center">
                 <Button
                   onClick={loadMoreAlbums}
                   disabled={isLoadingMore}
+                  className="hover:scale-105"
                 >
                   {isLoadingMore ? "Loading..." : "Load More Albums"}
                 </Button>
@@ -72,6 +84,7 @@ export default function AlbumsCard({
             )}
           </>
         ) : (
+          // fallback message if no data from API
           <div>
             <p>Hmm, it seems like you didn&apos;t save any albums yet.</p>
             <p className="text-xs bg-primary inline-block text-primary hover:text-black cursor-pointer transition-colors px-3">

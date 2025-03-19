@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   const timeRange = searchParams.get('time_range')
   // || 'medium_term';
   const offset = searchParams.get('offset') || '0';
-  const limit = '10'; // Fixed at 10 per load
+  const limit = '8'; // Fixed at 10 per load
 
   console.log("Time Range:", timeRange);
   console.log("Offset:", offset);
