@@ -25,6 +25,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
+      <head>
+        <script async src="https://umami.xavierkhew.com/script.js" data-website-id="6ea34660-8aae-4a07-a6c5-238f369892d3"></script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased container mx-auto text-white`}
       >
